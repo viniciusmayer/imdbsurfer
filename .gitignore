@@ -5,3 +5,8 @@ Lib
 Scripts
 pip-selfcheck.json
 tcl
+*.pyc
+bin
+include
+lib
+local
