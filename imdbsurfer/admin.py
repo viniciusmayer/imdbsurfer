@@ -3,8 +3,8 @@ from django.contrib import admin
 from models import Movie
 
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ('name', 'year', 'index', 'rate', 'votes', 'link', 'obs')
-    list_filter = ['year', 'index', 'rate']
+    list_display = ('name', 'year', 'index', 'rate', 'metascore', 'minutes', 'votes', 'link', 'obs')
+    list_filter = ['year', 'index', 'rate', 'metascore']
     search_fields = ['name', 'obs']
     
     def save_model(self, request, obj, form, change):
