@@ -1,7 +1,7 @@
 from django.db import models
 
 from common.models import CommonInfo, Common 
-
+from django.utils.html import format_html
     
 class Role(CommonInfo):
     def __str__(self):
@@ -35,7 +35,12 @@ class Movie(CommonInfo):
     artists = models.ManyToManyField(ArtistRole, through='MovieArtistRole')
     
     def __str__(self):
-        return '{0} ({1})'.format(self.name, self.year) 
+        return '{0} ({1})'.format(self.name, self.year)
+
+    def show_link(self):
+        return  format_html('<a href="{0}">{1}</a>'.format(self.link, self.link))
+    show_link.short_description = 'Link' 
+
 
 class MovieGenre(Common):
     movie = models.ForeignKey(Movie)

@@ -1,9 +1,9 @@
 from django.contrib import admin
 
-from models import Movie, Role, Artist, Genre, ArtistRole
+from imdbsurfer.models import Movie, Role, Artist, Genre, ArtistRole
 
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ('name', 'year', 'index', 'rate', 'metascore', 'minutes', 'votes', 'link', 'obs')
+    list_display = ('name', 'year', 'index', 'rate', 'metascore', 'minutes', 'votes', 'show_link', 'obs')
     list_filter = ['year', 'index', 'rate', 'metascore']
     search_fields = ['name', 'obs']
     
