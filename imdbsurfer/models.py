@@ -45,7 +45,11 @@ class Movie(CommonInfo):
 class MovieGenre(Common):
     movie = models.ForeignKey(Movie)
     genre = models.ForeignKey(Genre)
-    index = models.PositiveSmallIntegerField()
+    index = models.PositiveSmallIntegerField(null=True)
+    
+    def getImdbLink(self):
+        return self.movie.show_link()
+    getImdbLink.short_description = 'IMDb'
 
 class MovieArtistRole(Common):
     movie = models.ForeignKey(Movie)

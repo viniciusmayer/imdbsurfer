@@ -1,6 +1,17 @@
 from django.contrib import admin
 
-from imdbsurfer.models import Movie, Role, Artist, Genre, ArtistRole
+from imdbsurfer.models import Movie, Role, Artist, Genre, ArtistRole, MovieGenre
+
+class MovieGenreAdmin(admin.ModelAdmin):
+    list_display = ('movie', 'genre', 'index', 'getImdbLink')
+    list_filter = ['genre__name', 'index']
+
+    def save_model(self, request, obj, form, change):
+        obj.user_create = request.user
+        obj.user_update = request.user
+        super(MovieGenreAdmin, self).save_model(request, obj, form, change)
+
+admin.site.register(MovieGenre, MovieGenreAdmin)
 
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('name', 'year', 'index', 'rate', 'metascore', 'minutes', 'votes', 'show_link', 'obs')
