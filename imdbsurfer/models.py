@@ -38,13 +38,14 @@ class Movie(CommonInfo):
         return '{0} ({1})'.format(self.name, self.year)
 
     def show_link(self):
-        return  format_html('<a href="{0}">{1}</a>'.format(self.link, self.link))
+        return  format_html('<a href="{0}" target="_blank">{1}</a>'.format(self.link, 'IMDb'))
     show_link.short_description = 'Link' 
 
 
 class MovieGenre(Common):
     movie = models.ForeignKey(Movie)
     genre = models.ForeignKey(Genre)
+    index = models.PositiveSmallIntegerField()
 
 class MovieArtistRole(Common):
     movie = models.ForeignKey(Movie)
