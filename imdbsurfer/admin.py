@@ -1,10 +1,48 @@
 from django.contrib import admin
 
-from imdbsurfer.models import Movie, Role, Artist, Genre, ArtistRole, MovieGenre
+from imdbsurfer.models import Movie, Role, Artist, Genre, ArtistRole, MovieGenre, MovieArtistRole
+from django.utils.html import format_html
+
+class MovieArtistRoleAdmin(admin.ModelAdmin):
+    list_display = ('movie', 'getMovieRate', 'getArtistName', 'getRoleName', 'getIMDbLink')
+    list_filter = ['artistRole__artist__name']
+    search_fields = ['movie__name', 'artistRole__artist__name']
+    
+    def getMovieRate(self, obj):
+        return obj.movie.rate
+    getMovieRate.short_description = 'Rate'
+    
+    def getArtistName(self, obj):
+        return obj.artistRole.artist.name
+    getArtistName.short_description = 'Artist'
+
+    def getRoleName(self, obj):
+        return obj.artistRole.role.name 
+    getRoleName.short_description = 'Role'    
+
+    def getIMDbLink(self, obj):
+        return format_html('<a href="{0}" target="_blank">{1}</a>'.format(obj.movie.link, 'IMDb'))
+    getIMDbLink.short_description = 'IMDb'
+
+    def save_model(self, request, obj, form, change):
+        obj.user_create = request.user
+        obj.user_update = request.user
+        super(MovieArtistRoleAdmin, self).save_model(request, obj, form, change)
+
+admin.site.register(MovieArtistRole, MovieArtistRoleAdmin)
 
 class MovieGenreAdmin(admin.ModelAdmin):
-    list_display = ('movie', 'genre', 'index', 'getImdbLink')
+    list_display = ('movie', 'getMovieRate', 'genre', 'index', 'getIMDbLink')
     list_filter = ['genre__name', 'index']
+
+    def getMovieRate(self, obj):
+        return obj.movie.rate
+    getMovieRate.short_description = 'Rate'
+    
+    def getIMDbLink(self, obj):
+        return format_html('<a href="{0}" target="_blank">{1}</a>'.format(obj.movie.link, 'IMDb'))
+    getIMDbLink.short_description = 'IMDb' 
+
 
     def save_model(self, request, obj, form, change):
         obj.user_create = request.user
@@ -14,10 +52,13 @@ class MovieGenreAdmin(admin.ModelAdmin):
 admin.site.register(MovieGenre, MovieGenreAdmin)
 
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ('name', 'year', 'index', 'rate', 'metascore', 'minutes', 'votes', 'show_link', 'obs')
-    list_filter = ['year', 'index', 'rate', 'metascore']
-    search_fields = ['name', 'obs']
-    
+    list_display = ('name', 'year', 'rate', 'metascore', 'minutes', 'votes', 'getIMDbLink')
+    search_fields = ['name']
+
+    def getIMDbLink(self, obj):
+        return format_html('<a href="{0}" target="_blank">{1}</a>'.format(obj.link, 'IMDb'))
+    getIMDbLink.short_description = 'IMDb' 
+
     def save_model(self, request, obj, form, change):
         obj.user_create = request.user
         obj.user_update = request.user
