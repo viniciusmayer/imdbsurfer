@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='moviegenre',
             name='type',
-            field=models.ForeignKey(default=11, on_delete=django.db.models.deletion.CASCADE, to='imdbsurfer.Type'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='imdbsurfer.Type'),
             preserve_default=False,
         ),
     ]

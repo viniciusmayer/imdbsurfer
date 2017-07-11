@@ -30,7 +30,7 @@ class Movie(CommonInfo):
     rate = models.DecimalField(max_digits=3, decimal_places=1)
     votes = models.PositiveIntegerField()
     link = models.CharField(max_length=255)
-    minutes = models.PositiveSmallIntegerField()
+    minutes = models.PositiveSmallIntegerField(null=True)
     metascore = models.PositiveSmallIntegerField(null=True)
     watched = models.BooleanField(default=False)
     watch = models.BooleanField(default=False)
