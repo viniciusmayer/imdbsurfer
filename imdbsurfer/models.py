@@ -11,6 +11,10 @@ class Artist(CommonInfo):
 
     def __str__(self):
         return self.name
+
+class Type(CommonInfo):
+    def __str__(self):
+        return self.name
     
 class Genre(CommonInfo):
     def __str__(self):
@@ -39,6 +43,7 @@ class Movie(CommonInfo):
 class MovieGenre(Common):
     movie = models.ForeignKey(Movie)
     genre = models.ForeignKey(Genre)
+    type = models.ForeignKey(Type)
     index = models.PositiveSmallIntegerField(null=True)
 
 class MovieArtistRole(Common):
