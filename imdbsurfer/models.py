@@ -38,7 +38,7 @@ class Movie(CommonInfo):
     artists = models.ManyToManyField(ArtistRole, through='MovieArtistRole')
     
     def __str__(self):
-        return '{0} ({1})'.format(self.name.encode('utf-8'), self.year)
+        return '{0} ({1})'.format(self.name, self.year)
 
 class MovieGenre(Common):
     movie = models.ForeignKey(Movie)
