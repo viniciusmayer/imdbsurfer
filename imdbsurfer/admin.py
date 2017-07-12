@@ -4,8 +4,8 @@ from imdbsurfer.models import Movie, Role, Artist, Genre, ArtistRole, MovieGenre
 from django.utils.html import format_html
 
 class MovieArtistRoleAdmin(admin.ModelAdmin):
-    list_display = ('movie', 'getMovieRate', 'getArtistName', 'getRoleName', 'getIMDbLink')
-    list_filter = ['artistRole__artist__name']
+    list_display = ('movie', 'getIMDbLink', 'getMovieRate', 'getArtistName', 'getRoleName')
+    list_filter = ['artistRole__role__name']
     search_fields = ['movie__name', 'artistRole__artist__name']
     
     def getMovieRate(self, obj):
@@ -53,7 +53,7 @@ class MovieGenreAdmin(admin.ModelAdmin):
 admin.site.register(MovieGenre, MovieGenreAdmin)
 
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ('name', 'year', 'rate', 'metascore', 'minutes', 'votes', 'getIMDbLink')
+    list_display = ('name', 'year', 'getIMDbLink', 'rate', 'metascore', 'minutes', 'votes')
     search_fields = ['name']
 
     def getIMDbLink(self, obj):
