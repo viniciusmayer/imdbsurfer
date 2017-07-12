@@ -32,8 +32,8 @@ class MovieArtistRoleAdmin(admin.ModelAdmin):
 admin.site.register(MovieArtistRole, MovieArtistRoleAdmin)
 
 class MovieGenreAdmin(admin.ModelAdmin):
-    list_display = ('movie', 'getIMDbLink', 'getMovieRate', 'genre', 'index')
-    list_filter = ['genre__name', 'index']
+    list_display = ('movie', 'getIMDbLink', 'getMovieRate', 'genre', 'type', 'index')
+    list_filter = ['genre__name', 'type__name', 'index']
     search_fields = ['movie__name']
 
     def getMovieRate(self, obj):
