@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from imdbsurfer.models import Movie, Role, Artist, Genre, ArtistRole, MovieGenre, MovieArtistRole
+from imdbsurfer.models import Movie, Role, Artist, Genre, MovieGenre, MovieArtistRole
 from django.utils.html import format_html
 
 class MovieArtistRoleAdmin(admin.ModelAdmin):
