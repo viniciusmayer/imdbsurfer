@@ -22,8 +22,8 @@ class Genre(CommonInfo):
         return self.name
 
 class ArtistRole(Common):
-    artist = models.ForeignKey(Artist)
-    role = models.ForeignKey(Role)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
 
 class Movie(CommonInfo):
     year = models.PositiveSmallIntegerField()
@@ -42,11 +42,11 @@ class Movie(CommonInfo):
         return '{0} ({1})'.format(self.name, self.year)
 
 class MovieGenre(Common):
-    movie = models.ForeignKey(Movie)
-    genre = models.ForeignKey(Genre)
-    type = models.ForeignKey(Type)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+    type = models.ForeignKey(Type, on_delete=models.CASCADE)
     index = models.PositiveSmallIntegerField(null=True)
 
 class MovieArtistRole(Common):
-    movie = models.ForeignKey(Movie)
-    artistRole = models.ForeignKey(ArtistRole)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    artistRole = models.ForeignKey(ArtistRole, on_delete=models.CASCADE)
