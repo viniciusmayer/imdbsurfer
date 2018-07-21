@@ -27,7 +27,7 @@ class ArtistRole(Common):
 
 class Movie(CommonInfo):
     year = models.PositiveSmallIntegerField()
-    index = models.PositiveSmallIntegerField(null=True)
+    index = models.DecimalField(max_digits=3, decimal_places=2, null=True)
     rate = models.DecimalField(max_digits=3, decimal_places=1)
     votes = models.PositiveIntegerField()
     link = models.CharField(max_length=255)
