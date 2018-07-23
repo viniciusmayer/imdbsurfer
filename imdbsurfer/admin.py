@@ -54,6 +54,7 @@ admin.site.register(MovieGenre, MovieGenreAdmin)
 
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('name', 'year', 'getIMDbLink', 'rate', 'metascore', 'minutes', 'votes', 'index')
+    list_filter = ['genres']
     search_fields = ['name']
 
     def getIMDbLink(self, obj):
