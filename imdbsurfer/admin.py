@@ -1,7 +1,8 @@
 from django.contrib import admin
-
-from imdbsurfer.models import Movie, Role, Artist, Genre, MovieGenre, MovieArtistRole
 from django.utils.html import format_html
+from imdbsurfer.models import Movie, Role, Artist, Genre, MovieGenre, MovieArtistRole, \
+    Type
+
 
 class MovieArtistRoleAdmin(admin.ModelAdmin):
     list_display = ('movie', 'getIMDbLink', 'getMovieRate', 'getArtistName', 'getRoleName')
@@ -52,9 +53,26 @@ class MovieGenreAdmin(admin.ModelAdmin):
 
 admin.site.register(MovieGenre, MovieGenreAdmin)
 
+class TypeFilter(admin.SimpleListFilter):
+    title = ('_type')
+    parameter_name = '_type'
+
+    def lookups(self, request, model_admin):
+        types = Type.objects.all()
+        vtypes = []
+        for _type in types:
+            vtypes.append((str(_type.id), _type.name))
+        return vtypes
+
+    def queryset(self, request, queryset):
+        if self.value() is not None:
+            print(self.value())
+            return queryset.filter(moviegenre__in=MovieGenre.objects.filter(type__id=self.value())).distinct()
+        return queryset.all()
+
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ('name', 'year', 'getIMDbLink', 'rate', 'metascore', 'minutes', 'votes', 'index')
-    list_filter = ['genres']
+    list_display = ('name', 'year', 'getIMDbLink', 'rate', 'metascore', 'minutes', 'votes', 'index', 'types', '_genres')
+    list_filter = ['genres', TypeFilter]
     search_fields = ['name']
 
     def getIMDbLink(self, obj):

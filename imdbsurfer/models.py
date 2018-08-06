@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+from common.models import CommonInfo, Common 
 from django.db import models
 
-from common.models import CommonInfo, Common 
-    
+
 class Role(CommonInfo):
     def __str__(self):
         return self.name
@@ -40,6 +40,19 @@ class Movie(CommonInfo):
     
     def __str__(self):
         return '{0} ({1})'.format(self.name, self.year)
+    
+    def types(self):
+        types = Type.objects.filter(moviegenre__in=MovieGenre.objects.filter(movie=self)).distinct()
+        tnames = []
+        for _type in types:
+            tnames.append(_type.name)
+        return tnames
+    
+    def _genres(self):
+        gnames = []
+        for genre in self.genres.all():
+            gnames.append(genre.name)
+        return gnames
 
 class MovieGenre(Common):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
