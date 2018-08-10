@@ -37,6 +37,9 @@ class Movie(CommonInfo):
     watch = models.BooleanField(default=False)
     genres = models.ManyToManyField(Genre, through='MovieGenre')
     artists = models.ManyToManyField(ArtistRole, through='MovieArtistRole')
+
+    class Meta:
+        ordering = ['-index', '-year']
     
     def __str__(self):
         return '{0} ({1})'.format(self.name, self.year)
