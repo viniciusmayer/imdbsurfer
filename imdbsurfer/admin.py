@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from imdbsurfer.models import Movie, Role, Artist, Genre, MovieGenre, MovieArtistRole, \
-    Type
+    Type, Configuration
 
 
 class MovieArtistRoleAdmin(admin.ModelAdmin):
@@ -118,3 +118,26 @@ class GenreAdmin(admin.ModelAdmin):
         super(GenreAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(Genre, GenreAdmin)
+
+class TypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'obs')
+    search_fields = ['name', 'obs']
+    
+    def save_model(self, request, obj, form, change):
+        obj.user_create = request.user
+        obj.user_update = request.user
+        super(TypeAdmin, self).save_model(request, obj, form, change)
+
+admin.site.register(Type, TypeAdmin)
+
+class ConfigurationAdmin(admin.ModelAdmin):
+    list_display = ('key', 'value')
+    search_fields = ['key', 'value']
+    
+    def save_model(self, request, obj, form, change):
+        obj.user_create = request.user
+        obj.user_update = request.user
+        super(ConfigurationAdmin, self).save_model(request, obj, form, change)
+
+admin.site.register(Configuration, ConfigurationAdmin)
+

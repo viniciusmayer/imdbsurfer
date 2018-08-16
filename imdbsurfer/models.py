@@ -66,3 +66,8 @@ class MovieGenre(Common):
 class MovieArtistRole(Common):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     artistRole = models.ForeignKey(ArtistRole, on_delete=models.CASCADE)
+
+class Configuration(CommonInfo):
+    key = models.CharField(max_length=255)
+    value = models.CharField(max_length=255)
+    
