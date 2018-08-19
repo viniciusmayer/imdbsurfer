@@ -53,7 +53,7 @@ class Movie(CommonInfo):
     
     def _genres(self):
         gnames = []
-        for genre in self.genres.all():
+        for genre in self.genres.all().distinct():
             gnames.append(genre.name)
         return gnames
 
