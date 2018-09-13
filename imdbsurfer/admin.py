@@ -70,10 +70,18 @@ class TypeFilter(admin.SimpleListFilter):
             return queryset.filter(moviegenre__in=MovieGenre.objects.filter(type__id=self.value())).distinct()
         return queryset.all()
 
+def watched(modeladmin, request, queryset):
+    for q in queryset:
+        q.watched = True
+        q.save()
+    pass
+watched.short_description = 'Marcar como assistido'    
+
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ('name', 'year', 'getIMDbLink', 'rate', 'metascore', 'minutes', 'votes', 'index', 'types', '_genres')
-    list_filter = ['genres', TypeFilter]
+    list_display = ('name', 'year', 'getIMDbLink', 'rate', 'metascore', 'minutes', 'votes', 'index', 'types', '_genres', 'last_update')
+    list_filter = ['watched', 'genres', TypeFilter]
     search_fields = ['name']
+    actions = [watched, ]
 
     def getIMDbLink(self, obj):
         return format_html('<a href="{0}" target="_blank">{1}</a>'.format(obj.link, 'IMDb'))
