@@ -66,8 +66,57 @@ class TypeFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() is not None:
-            print(self.value())
             return queryset.filter(moviegenre__in=MovieGenre.objects.filter(type__id=self.value())).distinct()
+        return queryset.all()
+
+class IndexFilter(admin.SimpleListFilter):
+    title = ('Index')
+    parameter_name = '_index'
+    
+    def lookups(self, request, model_admin):
+        return [('0', '9+')
+                , ('1', '8+')
+                , ('2', '7+')
+                , ('3', '6+')
+                , ('4', '8-9')
+                , ('5', '7-8')
+                , ('6', '6.5-7')
+                , ('7', '6-6.5')]
+
+    def queryset(self, request, queryset):
+        if (self.value() is not None):
+            if (self.value() == '0'):
+                return queryset.filter(index__gte=9.00)
+            elif (self.value() ==  '1'):
+                return queryset.filter(index__gte=8.00)
+            elif (self.value() ==  '2'):
+                return queryset.filter(index__gte=7.00)
+            elif (self.value() ==  '3'):
+                return queryset.filter(index__gte=6.00)
+            elif (self.value() ==  '4'):
+                return queryset.filter(index__gte=8.00).filter(index__lt=9.00)
+            elif (self.value() ==  '5'):
+                return queryset.filter(index__gte=7.00).filter(index__lt=8.00)
+            elif (self.value() ==  '6'):
+                return queryset.filter(index__gte=6.50).filter(index__lt=7.00)
+            elif (self.value() ==  '7'):
+                return queryset.filter(index__gte=6.00).filter(index__lt=6.50)
+        else:
+            return queryset.all()
+
+class LastUpdateFilter(admin.SimpleListFilter):
+    title = ('Last update')
+    parameter_name = '_last_update'
+    
+    def lookups(self, request, model_admin):
+        return [('1', '> 0'),  ('0', '< 0')]
+
+    def queryset(self, request, queryset):
+        if self.value() is not None:
+            if (self.value() == '0'):
+                return queryset.filter(last_update__lt=0)
+            elif (self.value() == '1'):
+                return queryset.filter(last_update__gt=0)
         return queryset.all()
 
 def watched(modeladmin, request, queryset):
@@ -79,7 +128,7 @@ watched.short_description = 'Marcar como assistido'
 
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('name', 'year', 'getIMDbLink', 'rate', 'metascore', 'minutes', 'votes', 'index', 'types', '_genres', 'last_update')
-    list_filter = ['watched', 'genres', TypeFilter]
+    list_filter = ['watched', 'genres', TypeFilter, LastUpdateFilter, IndexFilter]
     search_fields = ['name']
     actions = [watched, ]
 
