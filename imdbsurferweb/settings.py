@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'imdbsurfer',
         'USER': 'imdbsurfer',
         'PASSWORD': '1mdbsurf3r',
-        'HOST': '127.0.0.1',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
