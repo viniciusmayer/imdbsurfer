@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from imdbsurfer.models import Movie, Role, Artist, Genre, MovieGenre, MovieArtistRole, \
     Type, Configuration
 
-
+'''
 class MovieArtistRoleAdmin(admin.ModelAdmin):
     list_display = ('movie', 'getIMDbLink', 'getMovieRate', 'getArtistName', 'getRoleName')
     list_filter = ['artistRole__role__name']
@@ -52,9 +52,11 @@ class MovieGenreAdmin(admin.ModelAdmin):
         super(MovieGenreAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(MovieGenre, MovieGenreAdmin)
+'''
+
 
 class TypeFilter(admin.SimpleListFilter):
-    title = ('_type')
+    title = '_type'
     parameter_name = '_type'
 
     def lookups(self, request, model_admin):
@@ -69,8 +71,9 @@ class TypeFilter(admin.SimpleListFilter):
             return queryset.filter(moviegenre__in=MovieGenre.objects.filter(type__id=self.value())).distinct()
         return queryset.all()
 
+
 class IndexFilter(admin.SimpleListFilter):
-    title = ('Index')
+    title = 'Index'
     parameter_name = '_index'
     
     def lookups(self, request, model_admin):
@@ -84,25 +87,26 @@ class IndexFilter(admin.SimpleListFilter):
                 , ('7', '6-6.5')]
 
     def queryset(self, request, queryset):
-        if (self.value() is not None):
-            if (self.value() == '0'):
+        if self.value() is not None:
+            if self.value() == '0':
                 return queryset.filter(index__gte=9.00)
-            elif (self.value() ==  '1'):
+            elif self.value() == '1':
                 return queryset.filter(index__gte=8.00)
-            elif (self.value() ==  '2'):
+            elif self.value() == '2':
                 return queryset.filter(index__gte=7.00)
-            elif (self.value() ==  '3'):
+            elif self.value() == '3':
                 return queryset.filter(index__gte=6.00)
-            elif (self.value() ==  '4'):
+            elif self.value() == '4':
                 return queryset.filter(index__gte=8.00).filter(index__lt=9.00)
-            elif (self.value() ==  '5'):
+            elif self.value() == '5':
                 return queryset.filter(index__gte=7.00).filter(index__lt=8.00)
-            elif (self.value() ==  '6'):
+            elif self.value() == '6':
                 return queryset.filter(index__gte=6.50).filter(index__lt=7.00)
-            elif (self.value() ==  '7'):
+            elif self.value() == '7':
                 return queryset.filter(index__gte=6.00).filter(index__lt=6.50)
         else:
             return queryset.all()
+
 
 class LastUpdateFilter(admin.SimpleListFilter):
     title = ('Last update')
@@ -119,12 +123,16 @@ class LastUpdateFilter(admin.SimpleListFilter):
                 return queryset.filter(last_update__gt=0)
         return queryset.all()
 
+
 def watched(modeladmin, request, queryset):
     for q in queryset:
         q.watched = True
         q.save()
     pass
+
+
 watched.short_description = 'Marcar como assistido'    
+
 
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('name', 'year', 'getIMDbLink', 'rate', 'metascore', 'minutes', 'votes', 'index', 'types', '_genres', 'last_update')
@@ -141,8 +149,10 @@ class MovieAdmin(admin.ModelAdmin):
         obj.user_update = request.user
         super(MovieAdmin, self).save_model(request, obj, form, change)
 
+
 admin.site.register(Movie, MovieAdmin)
 
+'''
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('name', 'obs')
     search_fields = ['name', 'obs']
@@ -197,4 +207,4 @@ class ConfigurationAdmin(admin.ModelAdmin):
         super(ConfigurationAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(Configuration, ConfigurationAdmin)
-
+'''
