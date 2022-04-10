@@ -1,7 +1,7 @@
 # project setup
 ```
-git clone https://github.com/viniciusmayer/imdbsurferweb.git
-cd imdbsurferweb
+git clone https://github.com/viniciusmayer/imdbsurfer.git
+cd imdbsurfer
 virtualenv -p python3 .
 source bin/activate
 pip install django psycopg2-binary
