@@ -19,40 +19,62 @@ class MoviesSpider(scrapy.Spider):
               'sci_fi', 'sport',
               'talk_show', 'thriller',
               'war', 'western']
-    # 'tv_episode', 'short', 'video', 'tvshort', 'game'
-    types = ['feature', 'tv_movie', 'tv_series', 'tv_special', 'mini_series', 'documentary']
+    types = ['feature', 'tv_movie', 'tv_series',
+             'tv_episode', 'tv_special', 'tv_miniseries',
+             'documentary', 'video_game', 'short',
+             'video', 'tv_short', 'podcast_series',
+             'podcast_episode', 'music_video']
     name = "movies"
-    url = 'http://www.imdb.com/search/title?count=100&genres={0}&num_votes=1000,&title_type={1}&sort=user_rating,desc&page={2}'
+    url = 'https://www.imdb.com/search/title/?title_type={title_type}' \
+          '&user_rating=6.0,' \
+          '&num_votes=1000,' \
+          '&genres={genres}' \
+          '&adult=include' \
+          '&count=100' \
+          '&page={page}'
     start_urls = []
     for genre in genres:
         for type in types:
             for i in range(1, 9):
-                start_urls.append(url.format(genre, type, i))
+                start_urls.append(url.format(genres=genre, title_type=type, page=i))
 
     def parse(self, response):
         for i in response.css('div[class="lister-item mode-advanced"]'):
             item = items.Movie()
             item['url'] = response.url
-            item['index'] = i.css('div[class="lister-item-content"]').css('h3[class="lister-item-header"]').css(
-                'span[class="lister-item-index unbold text-primary"]::text').extract()
-            item['year'] = i.css('div[class="lister-item-content"]').css('h3[class="lister-item-header"]').css(
-                'span[class="lister-item-year text-muted unbold"]::text').extract()
-            item['link'] = i.css('div[class="lister-item-content"]').css('h3[class="lister-item-header"]').css(
-                'a::attr(href)').extract()
-            item['name'] = i.css('div[class="lister-item-content"]').css('h3[class="lister-item-header"]').css(
-                'a::text').extract()
-            item['genres'] = i.css('div[class="lister-item-content"]').css('p[class="text-muted "]').css(
-                'span[class="genre"]::text').extract()
-            item['minutes'] = i.css('div[class="lister-item-content"]').css('p[class="text-muted "]').css(
-                'span[class="runtime"]::text').extract()
-            item['rate'] = i.css('div[class="lister-item-content"]').css('div[class="ratings-bar"]').css(
-                'div[class="inline-block ratings-imdb-rating"]').css('strong::text').extract()
-            item['metascore'] = i.css('div[class="lister-item-content"]').css('div[class="ratings-bar"]').css(
-                'div[class="inline-block ratings-metascore"]').css('span[class="metascore  favorable"]::text').extract()
-            item['artistsa'] = i.css('div[class="lister-item-content"]').css('p[class=""]').css('a::text').extract()
-            item['artistsb'] = i.css('div[class="lister-item-content"]').css('p[class=""]::text').extract()
-            item['votes'] = i.css('div[class="lister-item-content"]').css('p[class="sort-num_votes-visible"]').css(
-                'span::text').extract()
+            item['index'] = i.css('div[class="lister-item-content"]')\
+                .css('h3[class="lister-item-header"]')\
+                .css('span[class="lister-item-index unbold text-primary"]::text').extract()
+            item['year'] = i.css('div[class="lister-item-content"]')\
+                .css('h3[class="lister-item-header"]')\
+                .css('span[class="lister-item-year text-muted unbold"]::text').extract()
+            item['link'] = i.css('div[class="lister-item-content"]')\
+                .css('h3[class="lister-item-header"]')\
+                .css('a::attr(href)').extract()
+            item['name'] = i.css('div[class="lister-item-content"]')\
+                .css('h3[class="lister-item-header"]').css('a::text').extract()
+            item['genres'] = i.css('div[class="lister-item-content"]')\
+                .css('p[class="text-muted "]')\
+                .css('span[class="genre"]::text').extract()
+            item['minutes'] = i.css('div[class="lister-item-content"]')\
+                .css('p[class="text-muted "]')\
+                .css('span[class="runtime"]::text').extract()
+            item['rate'] = i.css('div[class="lister-item-content"]')\
+                .css('div[class="ratings-bar"]')\
+                .css('div[class="inline-block ratings-imdb-rating"]')\
+                .css('strong::text').extract()
+            item['metascore'] = i.css('div[class="lister-item-content"]')\
+                .css('div[class="ratings-bar"]')\
+                .css('div[class="inline-block ratings-metascore"]')\
+                .css('span[class="metascore  favorable"]::text').extract()
+            item['artistsa'] = i.css('div[class="lister-item-content"]')\
+                .css('p[class=""]')\
+                .css('a::text').extract()
+            item['artistsb'] = i.css('div[class="lister-item-content"]')\
+                .css('p[class=""]::text').extract()
+            item['votes'] = i.css('div[class="lister-item-content"]')\
+                .css('p[class="sort-num_votes-visible"]')\
+                .css('span::text').extract()
             yield item
 
     @classmethod
