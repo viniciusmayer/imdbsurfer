@@ -1,14 +1,13 @@
 -- FUNCTION: public.set_movie_index()
 
--- DROP FUNCTION public.set_movie_index();
+-- DROP FUNCTION IF EXISTS public.set_movie_index();
 
 CREATE OR REPLACE FUNCTION public.set_movie_index(
 	)
     RETURNS numeric
     LANGUAGE 'plpgsql'
-
     COST 100
-    VOLATILE
+    VOLATILE PARALLEL UNSAFE
 AS $BODY$
 
 DECLARE min_index decimal;

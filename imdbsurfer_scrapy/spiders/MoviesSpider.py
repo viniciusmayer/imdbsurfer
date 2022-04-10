@@ -1,13 +1,24 @@
 import scrapy
+import pika
+from scrapy import signals
 
 from imdbsurfer_scrapy import items
 
 
 class MoviesSpider(scrapy.Spider):
-    genres = ['action', 'adventure', 'animation', 'biography', 'comedy', 'crime', 'documentary', 'drama', 'family',
-              'fantasy', 'film_noir', 'game_show', 'history',
-              'horror', 'music', 'musical', 'mystery', 'news', 'reality_tv', 'romance', 'sci_fi', 'sport', 'talk_show',
-              'thriller', 'war', 'western']
+    genres = ['action', 'adventure', 'animation',
+              'biography',
+              'comedy', 'crime',
+              'documentary', 'drama',
+              'family', 'fantasy', 'film_noir',
+              'game_show',
+              'history', 'horror',
+              'music', 'musical', 'mystery',
+              'news',
+              'reality_tv', 'romance',
+              'sci_fi', 'sport',
+              'talk_show', 'thriller',
+              'war', 'western']
     # 'tv_episode', 'short', 'video', 'tvshort', 'game'
     types = ['feature', 'tv_movie', 'tv_series', 'tv_special', 'mini_series', 'documentary']
     name = "movies"
@@ -43,3 +54,16 @@ class MoviesSpider(scrapy.Spider):
             item['votes'] = i.css('div[class="lister-item-content"]').css('p[class="sort-num_votes-visible"]').css(
                 'span::text').extract()
             yield item
+
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        spider = super(MoviesSpider, cls).from_crawler(crawler, *args, **kwargs)
+        crawler.signals.connect(spider.spider_closed, signal=signals.spider_closed)
+        return spider
+
+    def spider_closed(self, spider):
+        connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        channel = connection.channel()
+        channel.queue_declare(queue='imdbsurferq')
+        channel.basic_publish(exchange='', routing_key='imdbsurferq', body='Hello World!')
+        connection.close()

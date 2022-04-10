@@ -1,6 +1,6 @@
--- FUNCTION: public.get_movie_index(integer, integer, integer, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric)
+-- FUNCTION: public.get_movie_index(integer, integer, integer, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric)
 
--- DROP FUNCTION public.get_movie_index(integer, integer, integer, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric);
+-- DROP FUNCTION IF EXISTS public.get_movie_index(integer, integer, integer, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric);
 
 CREATE OR REPLACE FUNCTION public.get_movie_index(
 	_movie_id integer,
@@ -23,9 +23,8 @@ CREATE OR REPLACE FUNCTION public.get_movie_index(
 	year_weight numeric)
     RETURNS numeric
     LANGUAGE 'plpgsql'
-
     COST 100
-    VOLATILE
+    VOLATILE PARALLEL UNSAFE
 AS $BODY$
 
 DECLARE _index decimal;

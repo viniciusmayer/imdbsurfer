@@ -2,7 +2,6 @@
 echo "ScrapyCrawl begin"
 date
 inicio=$(date +"%s")
-cd /home/eleonorvinicius/Projects/imdbsurfer
 source bin/activate
 scrapy crawl movies --logfile=scrapy_crawl.log --loglevel=ERROR
 fim=$(date +"%s")

@@ -5,10 +5,13 @@ Lib
 Scripts
 pip-selfcheck.json
 tcl
-*.pyc
+**/*.pyc
 bin
 include
 lib
 local
 .settings
 share
+.idea
+**/*.log
+pyvenv.cfg

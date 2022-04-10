@@ -1,6 +1,6 @@
 -- FUNCTION: public.rescale(numeric, numeric, numeric, numeric, numeric)
 
--- DROP FUNCTION public.rescale(numeric, numeric, numeric, numeric, numeric);
+-- DROP FUNCTION IF EXISTS public.rescale(numeric, numeric, numeric, numeric, numeric);
 
 CREATE OR REPLACE FUNCTION public.rescale(
 	oldvalue numeric,
@@ -10,9 +10,8 @@ CREATE OR REPLACE FUNCTION public.rescale(
 	newmax numeric)
     RETURNS numeric
     LANGUAGE 'plpgsql'
-
     COST 100
-    VOLATILE
+    VOLATILE PARALLEL UNSAFE
 AS $BODY$
 
 DECLARE oldrange decimal;
@@ -27,4 +26,4 @@ END;
 $BODY$;
 
 ALTER FUNCTION public.rescale(numeric, numeric, numeric, numeric, numeric)
-    OWNER TO postgres;
+    OWNER TO imdbsurfer;
