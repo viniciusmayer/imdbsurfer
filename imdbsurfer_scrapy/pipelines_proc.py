@@ -1,4 +1,8 @@
-import pika, sys, os, psycopg2, configparser
+import configparser
+import os
+import pika
+import psycopg2
+import sys
 
 selectSetMovieIndex = 'select set_movie_index();'
 
@@ -15,24 +19,20 @@ def get_connection():
 
 def callback(ch, method, properties, body):
     print(" [x] Received %r" % body)
-    connection = psycopg2.connect(get_connection())
-    cursor = connection.cursor()
+    dbconnection = psycopg2.connect(get_connection())
+    cursor = dbconnection.cursor()
     cursor.execute(selectSetMovieIndex)
-    connection.commit()
-
-
-def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-    channel = connection.channel()
-    channel.queue_declare(queue='imdbsurferq')
-    channel.basic_consume(queue='imdbsurferq', auto_ack=True, on_message_callback=callback)
-    print(' [*] Waiting for messages. To exit press CTRL+C')
-    channel.start_consuming()
+    dbconnection.commit()
 
 
 if __name__ == '__main__':
     try:
-        main()
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        channel = connection.channel()
+        channel.queue_declare(queue='imdbsurferq')
+        channel.basic_consume(queue='imdbsurferq', auto_ack=True, on_message_callback=callback)
+        print(' [*] Waiting for messages. To exit press CTRL+C')
+        channel.start_consuming()
     except KeyboardInterrupt:
         print('Interrupted')
         try:
